@@ -103,7 +103,7 @@ public class ParseStops {
 						
 					}
 					Stop stop = new Stop();
-					stop.setListId(i+1);
+					stop.setTrainId(Trains.get(i).getTrainId());
 					stop.setTimeArrival(timeArrival);
 					stop.setTimeDeparture(timeDeparture);
 					stop.setStaying(staying);

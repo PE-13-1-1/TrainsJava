@@ -7,7 +7,7 @@ public abstract class DAOFactory {
 
 	public static final int MSSQL = 1;
 	
-	public static final int MySQL = 2;
+	public static final int SQLite = 2;
 	
 	public abstract StationDAO getStationDAO();
 	
@@ -22,10 +22,11 @@ public abstract class DAOFactory {
 		switch (whichFactory) {
 		case MSSQL:
 			return new MSsqlDAOFactory();
-		case MySQL:
+		case SQLite:
 			return null;
 		default:
 			return null;
 		}
 	}
+	
 }

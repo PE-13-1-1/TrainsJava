@@ -30,6 +30,7 @@ public class Demo {
 	private static ArrayList<Train> trains = new ArrayList<Train>();
 
 	private static List<Integer> getTrainNumbers(Elements links) {
+		
 		List<Integer> list = new ArrayList<Integer>();
 		for (Element link : links) {
 			Elements elems = link.getElementsByTag("td");
@@ -203,7 +204,6 @@ public class Demo {
 			List<Integer> intList = getTrainNumbers(links);
 			for (int i = 0; i < set.size(); i++) {
 				Train train = new Train();
-				train.setScheduleId(i + 1);
 				train.setTrainId(i + 2);
 				try {
 					if (list.get(i).contains("-")) {
@@ -373,15 +373,15 @@ public class Demo {
 	public static void main(String[] args) {
 		TrainDAO trainDAO = DAOFactory.getDAOFactory(DAOFactory.MSSQL)
 				.getTrainDAO();
-//		trainDAO.truncateTrain();
-//		parseTrainPage(null);
-//		findAllStations();
-//		for (int i = 0; i < Stations.size(); i++) {
-//			parseTrainPage(Stations.get(i).getStationURL());
-//			System.out.println(i);
-//		}
-//		CheckTrains();
-//		LetsWorkWithStations();
+		trainDAO.truncateTrain();
+		parseTrainPage(null);
+		findAllStations();
+		for (int i = 0; i < Stations.size(); i++) {
+			parseTrainPage(Stations.get(i).getStationURL());
+			System.out.println(i);
+		}
+		CheckTrains();
+		LetsWorkWithStations();
 		ParseStops.ALaMain();
 		System.out.println("Code 0");
 	}

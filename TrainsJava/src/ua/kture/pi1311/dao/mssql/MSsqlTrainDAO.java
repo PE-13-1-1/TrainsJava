@@ -266,7 +266,6 @@ public class MSsqlTrainDAO implements TrainDAO {
 		pstmt.setString(3, train.getStatus());
 		pstmt.setInt(4, train.getTrainNumber());
 		pstmt.setString(5, train.getTrainUrl());
-		pstmt.setInt(6, train.getScheduleId());
 	}
 
 	private Train unMapTrain(ResultSet rs) throws SQLException {
@@ -276,7 +275,6 @@ public class MSsqlTrainDAO implements TrainDAO {
 		train.setTrainId(rs.getInt(MapperParameters.TRAIN_ID));
 		train.setStatus(rs.getString(MapperParameters.TRAIN_STATUS));
 		train.setTrainNumber(rs.getInt(MapperParameters.TRAIN_NUMBER));
-		train.setScheduleId(rs.getInt(MapperParameters.SCHEDULE_ID));
 		train.setTrainUrl(rs.getString(MapperParameters.TRAIN_URL));
 		return train;
 	}

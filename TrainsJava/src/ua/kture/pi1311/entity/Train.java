@@ -17,9 +17,7 @@ public class Train {
 	private int trainNumber;
 
 	private String trainUrl;
-
-	private int scheduleId;
-
+	
 	public Train() {
 
 	}
@@ -92,12 +90,5 @@ public class Train {
 		this.trainUrl = trainUrl;
 	}
 
-	public int getScheduleId() {
-		return scheduleId;
-	}
-
-	public void setScheduleId(int scheduleId) {
-		this.scheduleId = scheduleId;
-	}
 
 }

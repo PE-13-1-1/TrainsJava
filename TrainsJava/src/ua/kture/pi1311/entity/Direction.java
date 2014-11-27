@@ -1,10 +1,12 @@
 package ua.kture.pi1311.entity;
 
+
 public class Direction {
 
 	private int directionId;
 	
 	private String directionTitle;
+	
 	
 	public Direction() {
 	}
@@ -24,5 +26,6 @@ public class Direction {
 	public void setDirectionTitle(String directionTitle) {
 		this.directionTitle = directionTitle;
 	}
+	
 		
 }

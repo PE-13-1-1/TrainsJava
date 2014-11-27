@@ -8,15 +8,14 @@ import java.sql.Statement;
 
 import ua.kture.pi1311.dao.StopDAO;
 import ua.kture.pi1311.electrotrain.parametres.MapperParameters;
-import ua.kture.pi1311.entity.Direction;
 import ua.kture.pi1311.entity.Stop;
 import ua.kture.pi1311.entity.Train;
 
 public class MSsqlStopDAO  implements StopDAO{
 	private static final String SQL__FIND_STOP_BY_ID = "SELECT * FROM Stop WHERE stopId=?;";
-	private static final String SQL__UPDATE_STOP = "UPDATE Stop SET [stationId]=? [timeArrival]=? [timeDeparture]=? [listId]=? [staying]=? WHERE [stopId]=?;";
+	private static final String SQL__UPDATE_STOP = "UPDATE Stop SET [stationId]=? [timeArrival]=? [timeDeparture]=? [trainId]=? [staying]=? WHERE [stopId]=?;";
 	private static final String SQL__INSERT_STOP = "INSERT INTO Stop (stationId, timeArrival, timeDeparture, "
-			+ "staying,listId) VALUES (?, ?, ?, ?, ?);";
+			+ "staying,trainId) VALUES (?, ?, ?, ?, ?);";
 	private static final String SQL__DELETE_STOP = "DELETE FROM Stop WHERE stopId=?";
 	private static final String SQL_TRUNCATE_STOP = "USE KharkovTrain;TRUNCATE TABLE dbo.Stop; ";
 	public boolean insertStop(Stop stop) {
@@ -215,12 +214,12 @@ public class MSsqlStopDAO  implements StopDAO{
 		pstmt.setDate(2, stop.getTimeArrival());
 		pstmt.setDate(3, stop.getTimeDeparture());
 		pstmt.setInt(4, stop.getStaying());
-		pstmt.setInt(5, stop.getListId());
+		pstmt.setInt(5, stop.getTrainId());
 	}
 
 	private Stop unMapStop(ResultSet rs) throws SQLException {
 		Stop stop = new Stop();
-		stop.setListId(rs.getInt(MapperParameters.STOP_LIST_ID));
+		stop.setTrainId(rs.getInt(MapperParameters.STOP_LIST_ID));
 		stop.setStationId(rs.getInt(MapperParameters.STOP_STATION_ID));
 		stop.setStaying(rs.getInt(MapperParameters.STOP_STAYING));
 		stop.setStopId(rs.getInt(MapperParameters.STOP_ID));

@@ -10,7 +10,7 @@ public class Stop {
 
 	private int staying;
 
-	private int listId;
+	private int trainId;
 
 	private Date timeArrival;
 
@@ -27,7 +27,7 @@ public class Stop {
 		}
 		Stop stop = (Stop) o;
 		boolean result = (this.stopId == stop.stopId
-				&& this.listId == stop.listId);
+				&& this.trainId == stop.trainId);
 				return result;
 	}
 
@@ -55,12 +55,12 @@ public class Stop {
 		this.staying = staying;
 	}
 
-	public int getListId() {
-		return listId;
+	public int getTrainId() {
+		return trainId;
 	}
 
-	public void setListId(int listId) {
-		this.listId = listId;
+	public void setTrainId(int trainId) {
+		this.trainId = trainId;
 	}
 
 	public Date getTimeArrival() {

@@ -16,18 +16,30 @@ public class MSsqlDAOFactory extends DAOFactory
 	public MSsqlDAOFactory() {
 		
 	}
-	private static final String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-	private static final String DB_URL = "jdbc:sqlserver://localhost; instanceName=SQLEXPRESS; database=KharkovTrain;user=sa; password=master;";
+	private static final String DRIVER = "com.mysql.jdbc.Driver";
+	
+	static String host = "jdbc:mysql://localhost/kharkovtrain";
+    static String username = "root";
+    static String password = "";
+    
 	protected static synchronized Connection getConnection()
 			throws SQLException {
 		Connection con = null;
 		try {
-			Class.forName(DRIVER);
-			con = DriverManager.getConnection(DB_URL);
+			Class.forName(DRIVER).newInstance();
+			con = DriverManager.getConnection(host,username,password);
 			con.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			con.setAutoCommit(false);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return con;
 	}
