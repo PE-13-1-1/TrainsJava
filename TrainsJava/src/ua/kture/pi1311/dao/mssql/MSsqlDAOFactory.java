@@ -35,10 +35,8 @@ public class MSsqlDAOFactory extends DAOFactory
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return con;

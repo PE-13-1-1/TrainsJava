@@ -17,7 +17,7 @@ public class MSsqlStopDAO  implements StopDAO{
 	private static final String SQL__INSERT_STOP = "INSERT INTO Stop (stationId, timeArrival, timeDeparture, "
 			+ "staying,trainId) VALUES (?, ?, ?, ?, ?);";
 	private static final String SQL__DELETE_STOP = "DELETE FROM Stop WHERE stopId=?";
-	private static final String SQL_TRUNCATE_STOP = "USE KharkovTrain;TRUNCATE TABLE dbo.Stop; ";
+	private static final String SQL_TRUNCATE_STOP = "USE KharkovTrain;TRUNCATE TABLE Stop; ";
 	public boolean insertStop(Stop stop) {
 		Connection con = null;
 		boolean result = false;

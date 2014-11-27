@@ -18,11 +18,11 @@ public class MSsqlTrainDAO implements TrainDAO {
 	private static final String SQL__UPDATE_TRAIN = "UPDATE Train SET [startPoint]=?, [finalPoint]=?, [status]=?,"
 			+ "[trainNumber]=?,[trainURL]=?, [scheduleId]=? WHERE [trainId]=?;";
 	private static final String SQL__INSERT_TRAIN = "INSERT INTO Train (startPoint, finalPoint, status, "
-			+ "trainNumber,trainURL,scheduleId) VALUES (?, ?, ?, ?, ?,?);";
+			+ "trainNumber,trainURL) VALUES (?, ?, ?, ?, ?);";
 	private static final String SQL__DELETE_TRAIN = "DELETE FROM Train WHERE trainId=?";
-	private static final String SQL_TRUNCATE_TRAIN = "USE KharkovTrain;TRUNCATE TABLE dbo.Train; ";
-	private static final String SQL_GET_TRAIN_URL = "SELECT trainURL FROM KharkovTrain.dbo.Train";
-	private static final String SQL_SELECT_ALL_TRAINS = "SELECT * FROM KharkovTrain.dbo.Train";
+	private static final String SQL_TRUNCATE_TRAIN = "Truncate train;";
+	private static final String SQL_GET_TRAIN_URL = "SELECT trainURL FROM Train";
+	private static final String SQL_SELECT_ALL_TRAINS = "SELECT * FROM Train";
 	
 	public boolean insertTrain(Train train) {
 		Connection con = null;
@@ -32,11 +32,13 @@ public class MSsqlTrainDAO implements TrainDAO {
 			result = insertTrain(con, train);
 			con.commit();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 		return result;
@@ -51,6 +53,7 @@ public class MSsqlTrainDAO implements TrainDAO {
 			mapTrainForInsert(train, pstmt);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			result = false;
 			throw e;
 		} finally {
@@ -58,6 +61,7 @@ public class MSsqlTrainDAO implements TrainDAO {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage());
 				}
 			}
 		}
@@ -71,11 +75,13 @@ public class MSsqlTrainDAO implements TrainDAO {
 			con = MSsqlDAOFactory.getConnection();
 			train = findTrain(con, trainId);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 		return train;
@@ -93,12 +99,14 @@ public class MSsqlTrainDAO implements TrainDAO {
 			}
 			return train;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage());
 				}
 			}
 		}
@@ -110,11 +118,13 @@ public class MSsqlTrainDAO implements TrainDAO {
 			con = MSsqlDAOFactory.getConnection();
 			trains = findAllTrains(con);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 		return trains;
@@ -133,12 +143,14 @@ public class MSsqlTrainDAO implements TrainDAO {
 			}
 			return trains;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage());
 				}
 			}
 		}
@@ -155,6 +167,7 @@ public class MSsqlTrainDAO implements TrainDAO {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 		return updateResult;
@@ -171,12 +184,14 @@ public class MSsqlTrainDAO implements TrainDAO {
 			con.commit();
 			result = updatedRows != 0;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage());
 				}
 			}
 		}
@@ -191,11 +206,13 @@ public class MSsqlTrainDAO implements TrainDAO {
 			deleteTrain(trainId, con);
 			result = true;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 		return result;
@@ -215,6 +232,7 @@ public class MSsqlTrainDAO implements TrainDAO {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage());
 					throw e;
 				}
 			}
@@ -229,11 +247,13 @@ public class MSsqlTrainDAO implements TrainDAO {
 			truncateTrain(con);
 			result = true;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 		return result;
@@ -243,9 +263,10 @@ public class MSsqlTrainDAO implements TrainDAO {
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = con.prepareStatement(SQL_TRUNCATE_TRAIN);
-			pstmt.executeUpdate();
+			pstmt.execute();
 			con.commit();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			throw e;
 		} finally {
 			if (pstmt != null) {
