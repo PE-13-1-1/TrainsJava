@@ -16,12 +16,14 @@ import ua.kture.pi1311.electrotrain.parametres.MapperParameters;
 
 public class MSsqlStationDAO implements StationDAO{
 
-	private static final String SQL__FIND_STATION_BY_ID = "SELECT * FROM Station WHERE stationId=?;";
-	private static final String SQL__UPDATE_STATION = "UPDATE Station SET [stationName]=?, [stationURL]=? WHERE [stationId]=?;";
-	private static final String SQL__INSERT_STATION = "INSERT INTO Station (stationName, stationURL) VALUES (?, ?);";
-	private static final String SQL__DELETE_STATION = "DELETE FROM Station WHERE stationId=?";
-	private static final String SQL_TRUNCATE_STATION = "USE KharkovTrain;TRUNCATE TABLE dbo.Station";
-	private static final String SQL_FIND_ALL_STATIONS = "SELECT * FROM dbo.Station";
+	private static final String SQL__FIND_STATION_BY_ID = "SELECT * FROM station WHERE stationId=?;";
+	private static final String SQL__UPDATE_STATION = "UPDATE station SET [stationName]=?, [stationURL]=? WHERE [stationId]=?;";
+	private static final String SQL__INSERT_STATION = "INSERT INTO station (stationName, stationURL) VALUES (?, ?);";
+	private static final String SQL__DELETE_STATION = "DELETE FROM station WHERE stationId=?";
+	private static final String SQL_TRUNCATE_STATION = "TRUNCATE TABLE station";
+	private static final String SQL_FIND_ALL_STATIONS = "SELECT * FROM station";
+	private static final String SQL_STATION_SET_FOREIGNKEYS0 = "SET FOREIGN_KEY_CHECKS = 0;";
+	private static final String SQL_STATION_SET_FOREIGNKEYS1 = "SET FOREIGN_KEY_CHECKS = 1;";
 	
 	DirectionDAO directionDAO = DAOFactory.getDAOFactory(DAOFactory.MSSQL)
 			.getDirectionDAO(); 
@@ -33,11 +35,13 @@ public class MSsqlStationDAO implements StationDAO{
 			result = insertStation(con, station);
 			con.commit();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 		return result;
@@ -52,6 +56,7 @@ public class MSsqlStationDAO implements StationDAO{
 			mapStationForInsert(station, pstmt);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			result = false;
 			throw e;
 		} finally {
@@ -59,6 +64,7 @@ public class MSsqlStationDAO implements StationDAO{
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage());
 				}
 			}
 		}
@@ -71,11 +77,13 @@ public class MSsqlStationDAO implements StationDAO{
 			con = MSsqlDAOFactory.getConnection();
 			station = getStationById(con, stationId);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage() + this.getClass().getName().toString());
 			}
 		}
 		return station;
@@ -93,12 +101,14 @@ public class MSsqlStationDAO implements StationDAO{
 			}
 			return station;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage() + this.getClass().getName().toString());
 				}
 			}
 		}
@@ -110,11 +120,13 @@ public class MSsqlStationDAO implements StationDAO{
 			con = MSsqlDAOFactory.getConnection();
 			station = findStation(con, stationId);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage() + this.getClass().getName().toString());
 			}
 		}
 		return station;
@@ -132,12 +144,14 @@ public class MSsqlStationDAO implements StationDAO{
 			}
 			return station;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage() + this.getClass().getName().toString());
 				}
 			}
 		}
@@ -149,11 +163,13 @@ public class MSsqlStationDAO implements StationDAO{
 			con = MSsqlDAOFactory.getConnection();
 			stations = findStation(con);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage() + this.getClass().getName().toString());
 			}
 		}
 		return stations;
@@ -172,12 +188,14 @@ public class MSsqlStationDAO implements StationDAO{
 			}
 			return stations;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage() + this.getClass().getName().toString());
 				}
 			}
 		}
@@ -281,11 +299,13 @@ public class MSsqlStationDAO implements StationDAO{
 			truncateStation(con);
 			result = true;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage() + this.getClass().getName().toString());
 			}
 		}
 		return result;
@@ -295,15 +315,19 @@ public class MSsqlStationDAO implements StationDAO{
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = con.prepareStatement(SQL_TRUNCATE_STATION);
-			pstmt.executeUpdate();
+			pstmt.execute(SQL_STATION_SET_FOREIGNKEYS0);
+			pstmt.execute(SQL_TRUNCATE_STATION);
+			pstmt.execute(SQL_STATION_SET_FOREIGNKEYS1);
 			con.commit();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + " " + this.getClass().getName().toString());
 			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage() + " "  + this.getClass().getName().toString());
 					throw e;
 				}
 			}

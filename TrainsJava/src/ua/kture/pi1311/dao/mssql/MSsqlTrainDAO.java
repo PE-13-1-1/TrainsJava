@@ -14,17 +14,17 @@ import ua.kture.pi1311.electrotrain.parametres.MapperParameters;
 import ua.kture.pi1311.entity.Train;
 
 public class MSsqlTrainDAO implements TrainDAO {
-	private static final String SQL__FIND_TRAIN_BY_ID = "SELECT * FROM Train WHERE trainId=?;";
-	private static final String SQL__UPDATE_TRAIN = "UPDATE Train SET [startPoint]=?, [finalPoint]=?, [status]=?,"
+	private static final String SQL__FIND_TRAIN_BY_ID = "SELECT * FROM train WHERE trainId=?;";
+	private static final String SQL__UPDATE_TRAIN = "UPDATE train SET [startPoint]=?, [finalPoint]=?, [status]=?,"
 			+ "[trainNumber]=?,[trainURL]=?, [scheduleId]=? WHERE [trainId]=?;";
-	private static final String SQL__INSERT_TRAIN = "INSERT INTO Train (startPoint, finalPoint, status, "
+	private static final String SQL__INSERT_TRAIN = "INSERT INTO train (startPoint, finalPoint, status, "
 			+ "trainNumber,trainURL) VALUES (?, ?, ?, ?, ?);";
-	private static final String SQL__DELETE_TRAIN = "DELETE FROM Train WHERE trainId=?";
+	private static final String SQL__DELETE_TRAIN = "DELETE FROM train WHERE trainId=?";
 	private static final String SQL_TRAIN_SET_FOREIGNKEYS0 = "SET FOREIGN_KEY_CHECKS = 0;";
 	private static final String SQL_TRAIN_TRUNCATE = "Truncate train";
 	private static final String SQL_TRAIN_SET_FOREIGNKEYS1 = "SET FOREIGN_KEY_CHECKS = 1;";
-	private static final String SQL_GET_TRAIN_URL = "SELECT trainURL FROM Train";
-	private static final String SQL_SELECT_ALL_TRAINS = "SELECT * FROM Train";
+	private static final String SQL_GET_TRAIN_URL = "SELECT trainURL FROM train";
+	private static final String SQL_SELECT_ALL_TRAINS = "SELECT * FROM train";
 	
 	public boolean insertTrain(Train train) {
 		Connection con = null;	
@@ -228,6 +228,7 @@ public class MSsqlTrainDAO implements TrainDAO {
 			pstmt.executeUpdate();
 			con.commit();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			throw e;
 		} finally {
 			if (pstmt != null) {
@@ -311,11 +312,13 @@ public class MSsqlTrainDAO implements TrainDAO {
 			con = MSsqlDAOFactory.getConnection();
 			urles = getTrainURL(con);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 		return urles;
@@ -332,6 +335,7 @@ public class MSsqlTrainDAO implements TrainDAO {
 			}
 			return urles;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage());
 			throw e;
 		} finally {
 			if (pstmt != null) {

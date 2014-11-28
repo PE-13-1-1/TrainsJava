@@ -12,12 +12,14 @@ import ua.kture.pi1311.entity.Stop;
 import ua.kture.pi1311.entity.Train;
 
 public class MSsqlStopDAO  implements StopDAO{
-	private static final String SQL__FIND_STOP_BY_ID = "SELECT * FROM Stop WHERE stopId=?;";
-	private static final String SQL__UPDATE_STOP = "UPDATE Stop SET [stationId]=? [timeArrival]=? [timeDeparture]=? [trainId]=? [staying]=? WHERE [stopId]=?;";
-	private static final String SQL__INSERT_STOP = "INSERT INTO Stop (stationId, timeArrival, timeDeparture, "
+	private static final String SQL__FIND_STOP_BY_ID = "SELECT * FROM stop WHERE stopId=?;";
+	private static final String SQL__UPDATE_STOP = "UPDATE stop SET [stationId]=? [timeArrival]=? [timeDeparture]=? [trainId]=? [staying]=? WHERE [stopId]=?;";
+	private static final String SQL__INSERT_STOP = "INSERT INTO stop (stationId, timeArrival, timeDeparture, "
 			+ "staying,trainId) VALUES (?, ?, ?, ?, ?);";
-	private static final String SQL__DELETE_STOP = "DELETE FROM Stop WHERE stopId=?";
-	private static final String SQL_TRUNCATE_STOP = "USE KharkovTrain;TRUNCATE TABLE Stop; ";
+	private static final String SQL__DELETE_STOP = "DELETE FROM stop WHERE stopId=?";
+	private static final String SQL_TRUNCATE_STOP = "TRUNCATE TABLE stop; ";
+	private static final String SQL_STOP_SET_FOREIGNKEYS0 = "SET FOREIGN_KEY_CHECKS = 0;";
+	private static final String SQL_STOP_SET_FOREIGNKEYS1 = "SET FOREIGN_KEY_CHECKS = 1;";
 	public boolean insertStop(Stop stop) {
 		Connection con = null;
 		boolean result = false;
@@ -26,11 +28,13 @@ public class MSsqlStopDAO  implements StopDAO{
 			result = insertStop(con, stop);
 			con.commit();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage() + this.getClass().getName().toString());
 			}
 		}
 		return result;
@@ -44,6 +48,7 @@ public class MSsqlStopDAO  implements StopDAO{
 			mapStopForInsert(stop, pstmt);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 			result = false;
 			throw e;
 		} finally {
@@ -51,6 +56,7 @@ public class MSsqlStopDAO  implements StopDAO{
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage() + this.getClass().getName().toString());
 				}
 			}
 		}
@@ -65,11 +71,13 @@ public class MSsqlStopDAO  implements StopDAO{
 			con = MSsqlDAOFactory.getConnection();
 			train = findStop(con, stopId);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage() + this.getClass().getName().toString());
 			}
 		}
 		return train;
@@ -104,11 +112,13 @@ public class MSsqlStopDAO  implements StopDAO{
 			con = MSsqlDAOFactory.getConnection();
 			updateResult = updateStop(con, stop);
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage() + this.getClass().getName().toString());
 			}
 		}
 		return updateResult;
@@ -124,12 +134,14 @@ public class MSsqlStopDAO  implements StopDAO{
 			con.commit();
 			result = updatedRows != 0;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage() + this.getClass().getName().toString());
 				}
 			}
 		}
@@ -180,11 +192,13 @@ public class MSsqlStopDAO  implements StopDAO{
 			truncateStop(con);
 			result = true;
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 		} finally {
 			try {
 				if (con != null)
 					con.close();
 			} catch (SQLException e) {
+				System.out.println(e.getMessage() + this.getClass().getName().toString());
 			}
 		}
 		return result;
@@ -193,15 +207,19 @@ public class MSsqlStopDAO  implements StopDAO{
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = con.prepareStatement(SQL_TRUNCATE_STOP);
-			pstmt.execute();
+			pstmt.execute(SQL_STOP_SET_FOREIGNKEYS0);
+			pstmt.execute(SQL_TRUNCATE_STOP);
+			pstmt.execute(SQL_STOP_SET_FOREIGNKEYS1);
 			con.commit();
 		} catch (SQLException e) {
+			System.out.println(e.getMessage() + this.getClass().getName().toString());
 			throw e;
 		} finally {
 			if (pstmt != null) {
 				try {
 					pstmt.close();
 				} catch (SQLException e) {
+					System.out.println(e.getMessage() + this.getClass().getName().toString());
 					throw e;
 				}
 			}

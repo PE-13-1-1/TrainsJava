@@ -18,9 +18,12 @@ public class MSsqlDAOFactory extends DAOFactory
 	}
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 	
+//	static String host = "jdbc:mysql://216.231.128.34:3306/monopol_train?characterEncoding=utf8";
+//    static String username = "monopol";
+//    static String password = "M8c=?rtHYs";
 	static String host = "jdbc:mysql://localhost/kharkovtrain?characterEncoding=utf8";
-    static String username = "root";
-    static String password = "";
+	static String username = "root";
+	static String password = "";
     
 	protected static synchronized Connection getConnection()
 			throws SQLException {
