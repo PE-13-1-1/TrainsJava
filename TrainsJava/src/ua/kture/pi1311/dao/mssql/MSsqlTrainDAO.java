@@ -20,12 +20,14 @@ public class MSsqlTrainDAO implements TrainDAO {
 	private static final String SQL__INSERT_TRAIN = "INSERT INTO Train (startPoint, finalPoint, status, "
 			+ "trainNumber,trainURL) VALUES (?, ?, ?, ?, ?);";
 	private static final String SQL__DELETE_TRAIN = "DELETE FROM Train WHERE trainId=?";
-	private static final String SQL_TRUNCATE_TRAIN = "Truncate train;";
+	private static final String SQL_TRAIN_SET_FOREIGNKEYS0 = "SET FOREIGN_KEY_CHECKS = 0;";
+	private static final String SQL_TRAIN_TRUNCATE = "Truncate train";
+	private static final String SQL_TRAIN_SET_FOREIGNKEYS1 = "SET FOREIGN_KEY_CHECKS = 1;";
 	private static final String SQL_GET_TRAIN_URL = "SELECT trainURL FROM Train";
 	private static final String SQL_SELECT_ALL_TRAINS = "SELECT * FROM Train";
 	
 	public boolean insertTrain(Train train) {
-		Connection con = null;
+		Connection con = null;	
 		boolean result = false;
 		try {
 			con = MSsqlDAOFactory.getConnection();
@@ -262,8 +264,10 @@ public class MSsqlTrainDAO implements TrainDAO {
 	private void truncateTrain(Connection con) throws SQLException {
 		PreparedStatement pstmt = null;
 		try {
-			pstmt = con.prepareStatement(SQL_TRUNCATE_TRAIN);
-			pstmt.execute();
+			pstmt = con.prepareStatement(SQL_TRAIN_TRUNCATE);
+			pstmt.execute(SQL_TRAIN_SET_FOREIGNKEYS0);
+			pstmt.execute(SQL_TRAIN_TRUNCATE);
+			pstmt.execute(SQL_TRAIN_SET_FOREIGNKEYS1);
 			con.commit();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());

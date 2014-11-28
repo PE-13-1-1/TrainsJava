@@ -193,7 +193,7 @@ public class MSsqlStopDAO  implements StopDAO{
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = con.prepareStatement(SQL_TRUNCATE_STOP);
-			pstmt.executeUpdate();
+			pstmt.execute();
 			con.commit();
 		} catch (SQLException e) {
 			throw e;

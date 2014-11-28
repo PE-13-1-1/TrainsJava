@@ -18,7 +18,7 @@ public class MSsqlDAOFactory extends DAOFactory
 	}
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 	
-	static String host = "jdbc:mysql://localhost/kharkovtrain";
+	static String host = "jdbc:mysql://localhost/kharkovtrain?characterEncoding=utf8";
     static String username = "root";
     static String password = "";
     
