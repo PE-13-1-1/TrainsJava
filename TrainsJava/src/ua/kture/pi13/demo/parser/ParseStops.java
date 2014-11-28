@@ -1,5 +1,6 @@
 package ua.kture.pi13.demo.parser;
 
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,17 +53,19 @@ public class ParseStops {
 		try {
 			for (int i = 0; i < Trains.size(); i++) {
 				System.out.println(i);
+				try {
 				doc = Jsoup.connect(
 						"http://www.pz.gov.ua/prrasp/"
 								+ Trains.get(i).getTrainUrl()).get();
+				
 				Elements links = doc.getElementsByClass("bs1t");
 				for (Element element : links) {
 					Elements link = element.getElementsByTag("td");
 					int count = 0;
 					String station = null;
-					java.sql.Date timeArrival = null;
+					java.sql.Time timeArrival = null;
 					int staying = 0;
-					java.sql.Date timeDeparture = null;
+					java.sql.Time timeDeparture = null;
 					for (Element elemen : link) {
 						Date date = new Date();
 						SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
@@ -76,7 +79,7 @@ public class ParseStops {
 						case (1): {
 							if (string.length() != 1) {
 								date = formatter.parse(string);
-								timeArrival = new java.sql.Date(date.getTime());
+								timeArrival = new Time(date.getTime());
 							}
 							count++;
 							break;
@@ -94,7 +97,7 @@ public class ParseStops {
 						case (3): {
 							if (string.length() != 1) {
 								date = formatter.parse(string);
-								timeDeparture = new java.sql.Date(date.getTime());
+								timeDeparture = new Time(date.getTime());
 							}
 							count++;
 							break;
@@ -102,6 +105,7 @@ public class ParseStops {
 						}
 						
 					}
+				
 					Stop stop = new Stop();
 					stop.setTrainId(Trains.get(i).getTrainId());
 					stop.setTimeArrival(timeArrival);
@@ -115,6 +119,13 @@ public class ParseStops {
 						System.out.println(station);
 					}
 					stopDAO.insertStop(stop);
+					
+				}
+				}
+				catch (Exception ex) {
+					System.out.println(ex.getMessage());
+					i--;
+					continue;
 				}
 			}
 		} catch (Exception ex) {

@@ -30,7 +30,7 @@ public class Demo {
 	private static ArrayList<Train> trains = new ArrayList<Train>();
 
 	private static List<Integer> getTrainNumbers(Elements links) {
-		
+
 		List<Integer> list = new ArrayList<Integer>();
 		for (Element link : links) {
 			Elements elems = link.getElementsByTag("td");
@@ -58,41 +58,47 @@ public class Demo {
 		return list;
 	}
 
-	private static void CheckTrains() { 
+	private static void CheckTrains() {
 		Document doc;
 		try {
 			TrainDAO trainDAO = DAOFactory.getDAOFactory(DAOFactory.MSSQL)
 					.getTrainDAO();
 			ArrayList<Train> Trains = trainDAO.findAllTrains();
-			 for (int i = 0; i < Trains.size(); i++) {
-			 doc = Jsoup.connect(
-			 "http://www.pz.gov.ua/prrasp/"
-			 + Trains.get(i).getTrainUrl()).get();
-			 Elements links = doc.getElementsByClass("zagline");
-			 for (Element element : links) {
-			 String s1 = Trains.get(i).getStartPoint().trim();
-			 String s2 = Trains.get(i).getFinalPoint().trim();
-			 String s3 = "";
-			 // я таких костылей в жизни еще не делал
-			 for (int k = 1; k < s1.length(); k++) {
-			 s3 = s3 + s1.substring(k, k + 1);
-			 }
-			 if (element.text().contains(s3)
-			 && element.text().contains(s2)) {
-			 continue;
-			 } else {
-			 System.out.println(Trains.get(i).getTrainNumber());
-			 System.out.println(s3);
-			 System.out.println(s2);
-			 System.out.println(element.text());
-			 }
-			 }
-			
-			 }
+			for (int i = 0; i < Trains.size(); i++) {
+				try {
+					doc = Jsoup.connect(
+							"http://www.pz.gov.ua/prrasp/"
+									+ Trains.get(i).getTrainUrl()).get();
+					Elements links = doc.getElementsByClass("zagline");
+					for (Element element : links) {
+						String s1 = Trains.get(i).getStartPoint().trim();
+						String s2 = Trains.get(i).getFinalPoint().trim();
+						String s3 = "";
+						// я таких костылей в жизни еще не делал
+						for (int k = 1; k < s1.length(); k++) {
+							s3 = s3 + s1.substring(k, k + 1);
+						}
+						if (element.text().contains(s3)
+								&& element.text().contains(s2)) {
+							continue;
+						} else {
+							System.out.println(Trains.get(i).getTrainNumber());
+							System.out.println(s3);
+							System.out.println(s2);
+							System.out.println(element.text());
+						}
+					}
+				} catch (Exception ex) {
+					System.out.println(ex.getMessage());
+					i--;
+					continue;
+				}
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}
+
 	private static void CheckStationTable() {
 		Document doc;
 		StationDAO stationDAO = DAOFactory.getDAOFactory(DAOFactory.MSSQL)
@@ -100,10 +106,17 @@ public class Demo {
 		ArrayList<Station> Station = stationDAO.findAllStations();
 		try {
 			for (int i = 0; i < Station.size(); i++) {
-				doc = Jsoup.connect(
-						"http://www.pz.gov.ua/prrasp/"
-								+ Station.get(i).getStationURL()).get();
-				//—айт не выдает нужный результат. ѕроверка или вручную или как-то иначе
+				try {
+					doc = Jsoup.connect(
+							"http://www.pz.gov.ua/prrasp/"
+									+ Station.get(i).getStationURL()).get();
+					// —айт не выдает нужный результат. ѕроверка или вручную или
+					// как-то иначе
+				} catch (Exception ex) {
+					System.out.println(ex.getMessage());
+					i--;
+					continue;
+				}
 			}
 
 		} catch (Exception e) {
@@ -212,16 +225,14 @@ public class Demo {
 								train.setStartPoint(list.get(i).split("-")[0]);
 								train.setFinalPoint(list.get(i).split("-")[2]);
 							} catch (Exception exc) {
-								System.out
-										.println(list.get(i).toString());
+								System.out.println(list.get(i).toString());
 							}
 						} else {
 							try {
 								train.setStartPoint(list.get(i).split("-")[0]);
 								train.setFinalPoint(list.get(i).split("-")[1]);
 							} catch (Exception exc) {
-								System.out
-								.println(list.get(i).toString());
+								System.out.println(list.get(i).toString());
 							}
 						}
 					} else if (list.get(i).contains("Ц")) {
@@ -230,16 +241,14 @@ public class Demo {
 								train.setStartPoint(list.get(i).split("Ц")[0]);
 								train.setFinalPoint(list.get(i).split("Ц")[2]);
 							} catch (Exception exc) {
-								System.out
-								.println(list.get(i).toString());
+								System.out.println(list.get(i).toString());
 							}
 						} else {
 							try {
 								train.setStartPoint(list.get(i).split("Ц")[0]);
 								train.setFinalPoint(list.get(i).split("Ц")[1]);
 							} catch (Exception exc) {
-								System.out
-								.println(list.get(i).toString());
+								System.out.println(list.get(i).toString());
 							}
 
 						}
@@ -278,6 +287,8 @@ public class Demo {
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
+			parseTrainPage(URL);
+
 		}
 
 	}
@@ -326,6 +337,7 @@ public class Demo {
 
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
+			parseStationPage(url);
 		}
 
 	}
@@ -371,18 +383,18 @@ public class Demo {
 	}
 
 	public static void main(String[] args) {
-		TrainDAO trainDAO = DAOFactory.getDAOFactory(DAOFactory.MSSQL)
-				.getTrainDAO();
-		trainDAO.truncateTrain();
-		parseTrainPage(null);
-		findAllStations();
-		for (int i = 0; i < Stations.size(); i++) {
-			parseTrainPage(Stations.get(i).getStationURL());
-			System.out.println(i);
-		}
-		CheckTrains();
-		LetsWorkWithStations();
-//		ParseStops.ALaMain();
+		 TrainDAO trainDAO = DAOFactory.getDAOFactory(DAOFactory.MSSQL)
+		 .getTrainDAO();
+		 trainDAO.truncateTrain();
+		 parseTrainPage(null);
+		 findAllStations();
+		 for (int i = 0; i < Stations.size(); i++) {
+		 parseTrainPage(Stations.get(i).getStationURL());
+		 System.out.println(i);
+		 }
+		 CheckTrains();
+		 LetsWorkWithStations();
+		ParseStops.ALaMain();
 		System.out.println("Code 0");
 	}
 }
