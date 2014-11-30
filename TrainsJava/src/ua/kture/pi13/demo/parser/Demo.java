@@ -287,6 +287,7 @@ public class Demo {
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
+			System.out.println("HUY");
 			parseTrainPage(URL);
 
 		}
@@ -383,18 +384,29 @@ public class Demo {
 	}
 
 	public static void main(String[] args) {
-		 TrainDAO trainDAO = DAOFactory.getDAOFactory(DAOFactory.MSSQL)
-		 .getTrainDAO();
-		 trainDAO.truncateTrain();
-		 parseTrainPage(null);
-		 findAllStations();
-		 for (int i = 0; i < Stations.size(); i++) {
-		 parseTrainPage(Stations.get(i).getStationURL());
-		 System.out.println(i);
-		 }
-		 CheckTrains();
-		 LetsWorkWithStations();
+		TrainDAO trainDAO = DAOFactory.getDAOFactory(DAOFactory.MSSQL)
+				.getTrainDAO();
+		trainDAO.truncateTrain();
+		StationDAO stationDAO = DAOFactory.getDAOFactory(DAOFactory.MSSQL)
+				.getStationDAO();
+		stationDAO.truncateStation();
+		parseTrainPage(null);
+		LetsWorkWithStations();
+		findAllStations();
+		System.out.println("All stations found");
+		System.out.println("Stations.size() is " + Stations.size());
+		for (int i = 0; i < Stations.size(); i++) {
+			parseTrainPage(Stations.get(i).getStationURL());
+			System.out.println(i);
+		}
+		// CheckTrains();
+		System.out.println("trains found");
+		LetsWorkWithStations();
+		findAllStations();
+		System.out.println("Stations.size() is " + Stations.size());
+		System.out.println("LetsWorkWithStation");
 		ParseStops.ALaMain();
+		System.out.println("Parsing stops done");
 		System.out.println("Code 0");
 	}
 }

@@ -209,7 +209,7 @@ public class MSsqlStopDAO  implements StopDAO{
 			pstmt = con.prepareStatement(SQL_TRUNCATE_STOP);
 			pstmt.execute(SQL_STOP_SET_FOREIGNKEYS0);
 			pstmt.execute(SQL_TRUNCATE_STOP);
-			pstmt.execute(SQL_STOP_SET_FOREIGNKEYS1);
+//			pstmt.execute(SQL_STOP_SET_FOREIGNKEYS1);
 			con.commit();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage() + this.getClass().getName().toString());
